@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Random User Information</title>
+    <style>
+        .user {
+            margin-bottom: 20px;
+            background: grey;
+            border-radius: 15px;
+        }
+        #usersContainer {
+            display: flex;
+            justify-content: space-between;
+
+        }
+
+        .user img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+
+<button id="loadButton">Завантажити інформацію про користувачів</button>
+<div id="usersContainer"></div>
+
+<script>
+    document.getElementById('loadButton').addEventListener('click', function() {
+        fetch('https://randomuser.me/api/?inc=picture,location,cell,email&results=5')
+            .then(response => response.json())
+            .then(data => {
+                const usersContainer = document.getElementById('usersContainer');
+                usersContainer.innerHTML = '';
+
+                data.results.forEach(user => {
+                    const userDiv = document.createElement('div');
+                    userDiv.classList.add('user');
+                    userDiv.innerHTML = `
+          <img src="${user.picture.large}" alt="User Picture">
+          <p>Місто: ${user.location.city}</p>
+          <p>Мобільний: ${user.cell}</p>
+          <p>Країна: ${user.location.country}</p>
+          <p>Email: ${user.email}</p>
+        `;
+                    usersContainer.appendChild(userDiv);
+                });
+            });
+    });
+</script>
+
+</body>
+</html>
